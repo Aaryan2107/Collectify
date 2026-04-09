@@ -1,41 +1,30 @@
 <?php
-$products = [
-    'hw-001' => ['name' => 'Team Transport Euro Hauler', 'price' => 1490, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-002' => ['name' => 'Nissan 300 ZX GTS', 'price' => 950, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-003' => ['name' => 'Boulevard Mix 89', 'price' => 640, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-004' => ['name' => 'Twin Mill Premium', 'price' => 520, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-005' => ['name' => 'Nissan Skyline GT-R', 'price' => 799, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-006' => ['name' => 'Porsche 911 Turbo', 'price' => 699, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-007' => ['name' => 'Bone Shaker Flame Deco', 'price' => 460, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-008' => ['name' => 'Tesla Roadster Track', 'price' => 550, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-009' => ['name' => 'Ford GT Race Blue', 'price' => 620, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-010' => ['name' => 'Lamborghini Huracan LP', 'price' => 710, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-011' => ['name' => 'Treasure Hunt 2026', 'price' => 1890, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
-    'hw-012' => ['name' => 'Fast Wagon Drift Pack', 'price' => 845, 'image' => 'images/hotwheels.webp', 'category' => 'Hot Wheels'],
 
-    'mg-001' => ['name' => 'LB-Silhouette R35 GT-R', 'price' => 1650, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-002' => ['name' => 'Porsche 911 GT3 Touring', 'price' => 1390, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-003' => ['name' => 'Lamborghini Aventador SVJ', 'price' => 1490, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-004' => ['name' => 'Ford Mustang GT Police', 'price' => 1290, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-005' => ['name' => 'Nissan Fairlady Z Nismo', 'price' => 1340, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-006' => ['name' => 'Chevrolet Corvette C8.R', 'price' => 1410, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-007' => ['name' => 'Bugatti Chiron Pur Sport', 'price' => 1790, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-008' => ['name' => 'Mazda RX-7 Spirit R', 'price' => 1370, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-009' => ['name' => 'Mercedes-AMG GT Black', 'price' => 1525, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-010' => ['name' => 'Toyota Supra A90 Drift', 'price' => 1440, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-011' => ['name' => 'McLaren Senna Carbon', 'price' => 1880, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
-    'mg-012' => ['name' => 'Audi R8 LMS Evo', 'price' => 1460, 'image' => 'images/minigt.webp', 'category' => 'Mini GT'],
+function get_products_by_category_slug(PDO $pdo, string $slug): array
+{
+    $stmt = $pdo->prepare(
+        'SELECT p.product_id, p.name, p.price, p.image, p.stock, p.is_active, c.slug AS category_slug, c.name AS category_name
+         FROM products p
+         JOIN categories c ON c.id = p.category_id
+         WHERE c.slug = ? AND p.is_active = 1
+         ORDER BY p.sort_order, p.name'
+    );
+    $stmt->execute([$slug]);
 
-    'lg-001' => ['name' => 'LEGO City Fire Station', 'price' => 3999, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-002' => ['name' => 'Speed Champions GT Pack', 'price' => 2899, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-003' => ['name' => 'LEGO Technic Hypercar', 'price' => 7499, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-004' => ['name' => 'Galaxy Starfighter Set', 'price' => 5699, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-005' => ['name' => 'Modular Downtown Cafe', 'price' => 6890, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-006' => ['name' => 'Medieval Castle Fortress', 'price' => 8290, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-007' => ['name' => 'Ninjago Dragon Strike', 'price' => 3590, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-008' => ['name' => 'Architecture Skyline Pack', 'price' => 4790, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-009' => ['name' => 'Creator 3-in-1 Beach House', 'price' => 4190, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-010' => ['name' => 'Ideas Vintage Camera', 'price' => 5590, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-011' => ['name' => 'Botanical Flower Bouquet', 'price' => 3290, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-    'lg-012' => ['name' => 'Technic Formula Racer', 'price' => 2990, 'image' => 'images/lego.webp', 'category' => 'LEGO'],
-];
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+}
+
+function get_product_by_product_id(PDO $pdo, string $productId): ?array
+{
+    $stmt = $pdo->prepare(
+        'SELECT p.product_id, p.name, p.price, p.image, p.stock, p.is_active, c.slug AS category_slug, c.name AS category_name
+         FROM products p
+         JOIN categories c ON c.id = p.category_id
+         WHERE p.product_id = ?
+         LIMIT 1'
+    );
+    $stmt->execute([$productId]);
+
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $product ?: null;
+}

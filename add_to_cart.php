@@ -8,15 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$productId = $_POST['product_id'] ?? '';
+$productId = trim($_POST['product_id'] ?? '');
 $redirect = $_POST['redirect'] ?? 'cart.php';
 
-if (!isset($products[$productId])) {
+$product = get_product_by_product_id($pdo, $productId);
+if (!$product || (int)$product['is_active'] !== 1) {
     header('Location: ' . $redirect);
     exit;
 }
-
-$product = $products[$productId];
 $userId = (int) $_SESSION['user_id'];
 
 $check = $pdo->prepare('SELECT id, quantity FROM cart_items WHERE user_id = ? AND product_id = ? LIMIT 1');
@@ -28,7 +27,7 @@ if ($existing) {
     $update->execute([$existing['id']]);
 } else {
     $insert = $pdo->prepare('INSERT INTO cart_items (user_id, product_id, product_name, product_image, price, quantity) VALUES (?, ?, ?, ?, ?, 1)');
-    $insert->execute([$userId, $productId, $product['name'], $product['image'], $product['price']]);
+    $insert->execute([$userId, $product['product_id'], $product['name'], ($product['image'] ?? ''), $product['price']]);
 }
 
 header('Location: cart.php');

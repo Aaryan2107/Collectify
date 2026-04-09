@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/product_catalog.php';
-
-$ids = ['mg-001','mg-002','mg-003','mg-004','mg-005','mg-006','mg-007','mg-008','mg-009','mg-010','mg-011','mg-012'];
+$products = get_products_by_category_slug($pdo, 'minigt');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,27 +49,30 @@ $ids = ['mg-001','mg-002','mg-003','mg-004','mg-005','mg-006','mg-007','mg-008',
 
   <div class="section-title">All Mini GT Products</div>
   <div class="product-grid">
-    <?php foreach ($ids as $id): $product = $products[$id]; ?>
+    <?php foreach ($products as $product): ?>
       <div class="product-card">
-        <img src="<?= h($product['image']) ?>" alt="<?= h($product['name']) ?>">
+        <img src="<?= h($product['image'] ?: 'images/minigt.webp') ?>" alt="<?= h($product['name']) ?>">
         <div class="product-meta">
           <h3><?= h($product['name']) ?></h3>
-          <p><?= h($product['category']) ?> collectible</p>
+          <p><?= h($product['category_name']) ?> collectible</p>
           <div class="product-price">Rs. <?= number_format((float) $product['price'], 2) ?></div>
 
           <form method="post" action="add_to_cart.php" class="action-row">
-            <input type="hidden" name="product_id" value="<?= h($id) ?>">
+            <input type="hidden" name="product_id" value="<?= h($product['product_id']) ?>">
             <input type="hidden" name="redirect" value="minigt.php">
             <button type="submit" class="btn-secondary">Add to Cart</button>
           </form>
 
           <form method="post" action="buy_now.php" class="action-row">
-            <input type="hidden" name="product_id" value="<?= h($id) ?>">
+            <input type="hidden" name="product_id" value="<?= h($product['product_id']) ?>">
             <button type="submit" class="btn-buy">Buy Now</button>
           </form>
         </div>
       </div>
     <?php endforeach; ?>
+    <?php if (empty($products)): ?>
+      <p style="color:var(--muted);">No products available in this category yet.</p>
+    <?php endif; ?>
   </div>
 </div>
 

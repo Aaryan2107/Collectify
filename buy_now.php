@@ -8,13 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$productId = $_POST['product_id'] ?? '';
-if (!isset($products[$productId])) {
+$productId = trim($_POST['product_id'] ?? '');
+$product = get_product_by_product_id($pdo, $productId);
+if (!$product || (int)$product['is_active'] !== 1) {
     header('Location: exp1.php');
     exit;
 }
-
-$product = $products[$productId];
 $userId = (int) $_SESSION['user_id'];
 
 $pdo->beginTransaction();
@@ -24,7 +23,7 @@ try {
     $orderId = (int) $pdo->lastInsertId();
 
     $itemInsert = $pdo->prepare('INSERT INTO order_items (order_id, product_id, product_name, product_image, price, quantity) VALUES (?, ?, ?, ?, ?, 1)');
-    $itemInsert->execute([$orderId, $productId, $product['name'], $product['image'], $product['price']]);
+    $itemInsert->execute([$orderId, $product['product_id'], $product['name'], ($product['image'] ?? ''), $product['price']]);
 
     $pdo->commit();
     header('Location: orders.php?ok=1');
