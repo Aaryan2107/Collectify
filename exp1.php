@@ -1,5 +1,22 @@
 <?php
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/product_catalog.php';
+
+$homeCategories = get_home_categories($pdo);
+$laneCategories = [];
+foreach ($homeCategories as $category) {
+  $page = catalog_page_for_slug($category['slug']);
+  if ($page) {
+    $laneCategories[] = [
+      'name' => $category['name'],
+      'slug' => $category['slug'],
+      'description' => $category['description'] ?: 'Browse our latest collection.',
+      'image' => $category['image'] ?: default_category_image($category['slug']),
+      'page' => $page,
+      'count' => (int) $category['product_count'],
+    ];
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,31 +46,21 @@ require_once __DIR__ . '/auth.php';
 
   <div class="section-title">Explore Lanes</div>
   <section class="lane-grid">
-    <a class="lane-card" href="hotwheels.php">
-      <img src="images/hotwheels.webp" alt="Hot Wheels Lane">
+    <?php foreach ($laneCategories as $lane): ?>
+    <a class="lane-card" href="<?= h($lane['page']) ?>">
+      <img src="<?= h($lane['image']) ?>" alt="<?= h($lane['name']) ?> Lane">
       <div class="lane-overlay">
-        <h3>Hot Wheels</h3>
-        <p>Classic lines, premium releases, and chase variants.</p>
-        <span>Open Lane</span>
+        <h3><?= h($lane['name']) ?></h3>
+        <p><?= h($lane['description']) ?></p>
+        <span><?= $lane['count'] ?> Products</span>
       </div>
     </a>
-    <a class="lane-card" href="minigt.php">
-      <img src="images/minigt.webp" alt="Mini GT Lane">
-      <div class="lane-overlay">
-        <h3>Mini GT</h3>
-        <p>Licensed 1:64 castings with precision details.</p>
-        <span>Open Lane</span>
-      </div>
-    </a>
-    <a class="lane-card" href="lego.php">
-      <img src="images/lego.webp" alt="LEGO Lane">
-      <div class="lane-overlay">
-        <h3>LEGO</h3>
-        <p>Display-ready builds from technical to creative series.</p>
-        <span>Open Lane</span>
-      </div>
-    </a>
+    <?php endforeach; ?>
   </section>
+
+  <?php if (empty($laneCategories)): ?>
+    <p style="color:var(--muted);margin-top:18px;">No categories available yet. Add categories from the admin panel to populate the home page.</p>
+  <?php endif; ?>
 
 </div>
 

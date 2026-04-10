@@ -51,7 +51,7 @@ ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), email=VALUES(email)
 
 -- Seed some default categories based on the existing PHP files
 INSERT INTO categories (name, slug, description, sort_order) VALUES
-('Hot Wheels', 'hotwheels', 'Die-cast Hot Wheels collectibles', 1),
+('Hot Wheels', 'hot-wheels', 'Die-cast Hot Wheels collectibles', 1),
 ('LEGO', 'lego', 'LEGO sets and minifigures', 2),
 ('Mini GT', 'minigt', '1:64 scale Mini GT models', 3)
 ON DUPLICATE KEY UPDATE id=id;
