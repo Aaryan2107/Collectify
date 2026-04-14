@@ -29,7 +29,7 @@ foreach ($homeCategories as $category) {
 <body class="home-page">
 
 <header>
-  <h1><span>Collect</span>ify</h1>
+  <h1><a href="exp1.php"><span>Collect</span>ify</a></h1>
   <nav>
     <a href="exp1.php" class="active">Home</a>
     <?php if (is_logged_in()): ?>
@@ -40,6 +40,11 @@ foreach ($homeCategories as $category) {
     <?php endif; ?>
     <a href="cart.php">Cart</a>
   </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
 </header>
 
 <div class="container">
@@ -64,5 +69,6 @@ foreach ($homeCategories as $category) {
 
 </div>
 
+<script src="exp1.js"></script>
 </body>
 </html>

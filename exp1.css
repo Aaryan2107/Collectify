@@ -47,6 +47,11 @@ header h1 {
     letter-spacing: 1px;
 }
 
+header h1 a {
+    color: inherit;
+    text-decoration: none;
+}
+
 header h1 span {
     color: var(--accent);
 }
@@ -1234,4 +1239,185 @@ footer {
     .lane-card {
         min-height: 260px;
     }
+}
+/* ===========================
+   RESPONSIVE — HAMBURGER NAV
+   =========================== */
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 9px;
+    cursor: pointer;
+    color: var(--text);
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+
+.nav-toggle:hover { border-color: var(--accent); }
+
+.nav-toggle .bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    transform-origin: center;
+}
+
+.nav-toggle.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-toggle.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ===========================
+   RESPONSIVE — 768px
+   =========================== */
+@media (max-width: 768px) {
+
+    /* --- Hamburger visible; header nav becomes dropdown ---
+       Use "header nav" to avoid colliding with admin sidebar nav */
+    .nav-toggle { display: flex; }
+
+    header { position: relative; }
+
+    header nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 10px 16px 16px;
+        gap: 2px;
+        z-index: 99;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+    }
+
+    header nav.open { display: flex; }
+
+    header nav a {
+        font-size: 0.9rem;
+        padding: 11px 16px;
+        border-radius: 8px;
+        width: 100%;
+    }
+
+    header nav a:hover { background: var(--surface2); }
+
+    .nav-separator { display: none; }
+
+    /* --- Category bar: horizontal scroll, no wrap --- */
+    .category-bar {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 10px 16px !important;
+        gap: 8px !important;
+        scrollbar-width: none;
+    }
+
+    .category-bar::-webkit-scrollbar { display: none; }
+
+    .cat-item {
+        flex-shrink: 0 !important;
+        padding: 9px 14px !important;
+        font-size: 0.82rem !important;
+    }
+
+    /* --- Container padding --- */
+    .container { padding: 24px 16px; }
+
+    /* --- Forms: full-width --- */
+    form { max-width: 100% !important; padding: 20px !important; }
+
+    /* --- Action buttons: full-width --- */
+    .action-row .btn-secondary,
+    .action-row .btn-buy { width: 100%; text-align: center; }
+
+    /* --- Grids: 2 cols on tablet --- */
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .lane-grid    { grid-template-columns: repeat(2, 1fr); }
+
+    /* --- Home hero shell & bottom --- */
+    .hero-shell,
+    .home-bottom { grid-template-columns: 1fr; }
+
+    /* --- Signal & flow: 2 cols --- */
+    .signal-row,
+    .flow-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* --- Page hero heading --- */
+    .page-hero h2 { font-size: 1.6rem; }
+}
+
+/* ===========================
+   RESPONSIVE — 480px
+   (always 2-col min, Flipkart-style)
+   =========================== */
+@media (max-width: 480px) {
+
+    header { height: 54px; padding: 0 14px; }
+    header h1 { font-size: 1.3rem; }
+
+    /* --- Always 2 columns minimum --- */
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .lane-grid    { grid-template-columns: repeat(2, 1fr); }
+
+    /* --- Compact lane cards --- */
+    .lane-card        { min-height: 200px; }
+    .lane-overlay h3  { font-size: 1.1rem; }
+    .lane-overlay p   { font-size: 0.78rem; }
+    .lane-overlay span{ font-size: 0.68rem; padding: 4px 8px; }
+
+    /* --- Compact product cards --- */
+    .product-card img  { height: 130px; }
+    .product-meta      { padding: 10px 10px 12px; }
+    .product-meta h3   { font-size: 0.88rem; }
+    .product-meta p    { font-size: 0.78rem; }
+    .product-price     { font-size: 1.1rem; }
+    .btn-secondary,
+    .btn-buy           { font-size: 0.82rem; padding: 8px 10px; }
+
+    /* --- Signal / flow: 1 col --- */
+    .signal-row,
+    .flow-grid,
+    .hero-metrics,
+    .panel-grid { grid-template-columns: 1fr; }
+
+    /* --- Pricing: centred single col --- */
+    .pricing-grid  { flex-direction: column; align-items: center; }
+    .pricing-card  { width: 100%; max-width: 340px; }
+
+    /* --- Media: single col --- */
+    .media-row { flex-direction: column; }
+    .media-card { width: 100%; }
+    .media-card video,
+    .media-card iframe,
+    .media-card object { height: 195px; }
+
+    /* --- Tables: compact --- */
+    table  { font-size: 0.82rem; }
+    th, td { padding: 9px 10px; }
+
+    /* --- Hero copy padding --- */
+    .hero-copy,
+    .hero-panel,
+    .signal-card,
+    .flow-step,
+    .bottom-card { padding: 14px; }
+    .hero-copy h2 { font-size: 1.8rem; }
+
+    /* --- Category bar item padding --- */
+    .cat-item { padding: 8px 12px !important; }
 }

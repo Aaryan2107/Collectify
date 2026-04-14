@@ -13,7 +13,7 @@ $products = get_products_by_category_slug($pdo, 'minigt');
 </head>
 <body>
 <header>
-  <h1><span>Collect</span>ify</h1>
+  <h1><a href="exp1.php"><span>Collect</span>ify</a></h1>
   <nav>
     <a href="exp1.php">Home</a>
     <span class="nav-separator" aria-hidden="true"></span>
@@ -22,8 +22,14 @@ $products = get_products_by_category_slug($pdo, 'minigt');
       <a href="logout.php">Logout</a>
     <?php else: ?>
       <a href="login.php">Login</a>
+      <a href="register.php">Sign Up</a>
     <?php endif; ?>
   </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
 </header>
 
 <div class="category-bar">
@@ -76,5 +82,6 @@ $products = get_products_by_category_slug($pdo, 'minigt');
   </div>
 </div>
 
+<script src="exp1.js"></script>
 </body>
 </html>

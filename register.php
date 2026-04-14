@@ -45,13 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <header>
-  <h1><span>Collect</span>ify</h1>
+  <h1><a href="exp1.php"><span>Collect</span>ify</a></h1>
   <nav>
     <a href="exp1.php">Home</a>
     <a href="login.php">Login</a>
-    <a href="register.php" class="active">Register</a>
+    <a href="register.php" class="active">Sign Up</a>
     <a href="cart.php">Cart</a>
   </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
 </header>
 
 <div class="container">
@@ -82,5 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </form>
 </div>
 
+<script src="exp1.js"></script>
 </body>
 </html>

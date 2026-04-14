@@ -39,13 +39,18 @@ foreach ($items as $item) {
 </head>
 <body>
 <header>
-  <h1><span>Collect</span>ify</h1>
+  <h1><a href="exp1.php"><span>Collect</span>ify</a></h1>
   <nav>
     <a href="exp1.php">Home</a>
     <span class="nav-separator" aria-hidden="true"></span>
     <a href="orders.php">Orders</a>
     <a href="logout.php">Logout</a>
   </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
 </header>
 
 <div class="category-bar">
@@ -105,5 +110,6 @@ foreach ($items as $item) {
   <?php endif; ?>
 </div>
 
+<script src="exp1.js"></script>
 </body>
 </html>

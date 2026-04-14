@@ -33,6 +33,42 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: v
   border-right: 1px solid var(--border); display: flex; flex-direction: column;
   position: fixed; top: 0; left: 0; z-index: 100;
 }
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #121724;
+  color: var(--text);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 260;
+}
+.sidebar-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+body.sidebar-open .sidebar-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.sidebar-open .sidebar-toggle span:nth-child(2) { opacity: 0; }
+body.sidebar-open .sidebar-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.6);
+  z-index: 210;
+}
 .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); }
 .sidebar-logo h2 { font-size: 1.4rem; font-weight: 800; color: #fff; font-family: 'Rajdhani', sans-serif; letter-spacing: 0.8px; }
 .sidebar-logo h2 span { color: var(--accent); }
@@ -152,13 +188,31 @@ textarea { resize: vertical; min-height: 90px; }
 
 @media (max-width: 768px) {
   body { flex-direction: column; }
+  .sidebar-toggle { display: inline-flex; }
+  .sidebar-overlay { display: none; }
+  body.sidebar-open .sidebar-overlay { display: block; }
   .sidebar {
-    position: relative;
-    width: 100%;
-    min-height: auto;
-    transform: none;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    min-height: 100vh;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    border-right: 1px solid var(--border);
+    border-bottom: none;
+    z-index: 230;
+    overflow-y: auto;
+  }
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+  body.sidebar-open .sidebar-logo {
+    padding-left: 64px;
+  }
+  body.sidebar-open {
+    overflow: hidden;
   }
   .sidebar nav {
     padding: 10px;
@@ -168,14 +222,14 @@ textarea { resize: vertical; min-height: 90px; }
   }
   .main { margin-left: 0; width: 100%; }
   .topbar {
-    padding: 14px 18px;
+    padding: 14px 18px 14px 62px;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
   .content { padding: 18px; }
   .form-grid { grid-template-columns: 1fr; }
-  .stat-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .card-header { flex-direction: column; align-items: flex-start; gap: 10px; }
   .form-actions { flex-direction: column; }
 }
@@ -185,9 +239,15 @@ textarea { resize: vertical; min-height: 90px; }
 <?php } // end layout_head
 
 function layout_sidebar(string $active, string $admin_username): void { ?>
+<button class="sidebar-toggle" type="button" aria-label="Toggle sidebar" aria-expanded="false">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<div class="sidebar-overlay"></div>
 <div class="sidebar">
   <div class="sidebar-logo">
-    <h2>Collect<span>ify</span></h2>
+    <h2><a href="index.php">Collect<span>ify</span></a></h2>
     <p>Admin Panel</p>
   </div>
   <nav>
@@ -234,6 +294,42 @@ function layout_sidebar(string $active, string $admin_username): void { ?>
 <?php } // end layout_sidebar
 
 function layout_end(): void { ?>
+<script>
+(function () {
+  var toggle = document.querySelector('.sidebar-toggle');
+  var overlay = document.querySelector('.sidebar-overlay');
+  if (!toggle) return;
+
+  function setOpen(open) {
+    document.body.classList.toggle('sidebar-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!document.body.classList.contains('sidebar-open'));
+  });
+
+  if (overlay) {
+    overlay.addEventListener('click', function () {
+      setOpen(false);
+    });
+  }
+
+  document.querySelectorAll('.sidebar .nav-item, .sidebar .logout-link').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (window.innerWidth <= 768) {
+        setOpen(false);
+      }
+    });
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) {
+      setOpen(false);
+    }
+  });
+})();
+</script>
 </body>
 </html>
 <?php } // end layout_end
